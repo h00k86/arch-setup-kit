@@ -7,6 +7,22 @@ CONFIG_FILE="./config.conf"
 
 
 
+function init(){
+
+  clear
+  echo " ================================================================"
+  echo " ===----------------------------------------------------------==="
+  echo " ===---                                                    ---==="
+  echo " ===---  QEMU Utilities. Install and start VM's            ---==="
+  echo " ===---                                                    ---==="
+  echo " ===----------------------------------------------------------==="
+  echo " ================================================================"
+  echo
+  echo
+}
+
+
+
 function check_config_file(){
   
   if [[ ! -f "$CONFIG_FILE"]] ;; then
@@ -20,10 +36,31 @@ function check_config_file(){
 
 
 
+function setup(){
+
+  # create dir e copy necessary files
+  echo "[] create VMs dir"
+  mkdir -p $HOME/VMs
+  cp $0 $HOME/VMs
+  cp $CONFIG_FILE $HOME/VMs
+
+  echo "DO you wanna use the default paramater or do you wanna set disk and ram space?  "
+  echo "1) select default parameters from config file"
+  echo "2) set paramaters"
+  read -p "[?] ->" CHOICE 
+
+  if [[ "$CHOISE" == 1 ]]; then
+    check_config_file
+  else
+    read -p "[?] set ram amount" RAM_SPACE
+    read -p "[?] set disk amount" DISK_SPACE
+  fi
+  echo "ram: $RAM_SPACE , disk: $DISK_SPACE" 
+  
+}
 
 function create_disk(){
   
-  clear  
   read -p "[] insert the name for disk image" DISK_NAME
   qemu-img create -f qcow2 $DISK_NAME $DISK_SPACE
 }
@@ -37,7 +74,7 @@ function install_distro(){
 
 
 function setup_vm(){
-
+  init
   check_config_file
   create_disk
   install_distro
@@ -50,3 +87,10 @@ function setup_vm(){
 function start_distro(){
   echo "do nothing for now"
 }
+
+
+
+
+
+
+setup

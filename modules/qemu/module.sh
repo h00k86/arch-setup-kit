@@ -41,5 +41,6 @@ su -c "pacman -S $PACKAGES "
 
 echo "[+] QEMU Packages installed"
 
-
-
+echo "[] Configuring qemu script"
+chmod +x qemu-script.sh
+./qemu-script.sh
