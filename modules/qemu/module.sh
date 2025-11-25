@@ -33,14 +33,13 @@ echo $PACKAGES
 
 sleep 1
 
-#Update system
-
-su -c "pacman -Syu"
-
 su -c "pacman -S $PACKAGES "
 
 echo "[+] QEMU Packages installed"
 
 echo "[] Configuring qemu script"
-chmod +x qemu-script.sh
-./qemu-script.sh
+
+mkdir -p $HOME/VMs
+
+cp "$HOME/CODING/SCRIPT/arch-setup-kit/modules/qemu/qemu-script.sh" $HOME/VMs
+cp "$HOME/CODING/SCRIPT/arch-setup-kit/modules/qemu/config.conf" $HOME/VMs

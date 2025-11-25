@@ -3,7 +3,7 @@
 #!/usr/bin/env bash
 
 
-CONFIG_FILE="./config.conf"
+CONFIG_FILE="config.conf"
 
 
 
@@ -25,12 +25,12 @@ function init(){
 
 function check_config_file(){
   
-  if [[ ! -f "$CONFIG_FILE"]] ;; then
+  if [[ ! -f "$CONFIG_FILE" ]] ; then
     echo "file not found"
     exit 1
   fi
 
-  source "$CONFIG_FILE"
+  source "./$CONFIG_FILE"
 
 }
 
@@ -38,18 +38,23 @@ function check_config_file(){
 
 function setup(){
 
-  # create dir e copy necessary files
-  echo "[] create VMs dir"
-  mkdir -p $HOME/VMs
-  cp $0 $HOME/VMs
-  cp $CONFIG_FILE $HOME/VMs
-
-  echo "DO you wanna use the default paramater or do you wanna set disk and ram space?  "
-  echo "1) select default parameters from config file"
-  echo "2) set paramaters"
+  echo " You are configuring and installing the vm for the iso $1"
+  
+  iso=$(basename $1)
+  dirname="${iso%%-*}"
+  upper="${dirname^^}"
+  echo "This will create a dir with name $upper". Its ok?
+  
+  mkdir "$upper"
+  cp $1 $upper
+  cp $CONFIG_FILE $upper
+  cd $upper
+  echo " Do you wanna use the default paramater or do you wanna set disk and ram space?  "
+  echo " 1) select default parameters from config file"
+  echo " 2) set paramaters"
   read -p "[?] ->" CHOICE 
 
-  if [[ "$CHOISE" == 1 ]]; then
+  if [[ "$CHOICE" == 1 ]]; then
     check_config_file
   else
     read -p "[?] set ram amount" RAM_SPACE
@@ -61,21 +66,38 @@ function setup(){
 
 function create_disk(){
   
-  read -p "[] insert the name for disk image" DISK_NAME
+  read -p "[] insert the name for disk image: " DISK_NAME
   qemu-img create -f qcow2 $DISK_NAME $DISK_SPACE
 }
 
 function install_distro(){
   echo ""
-  read -p "[] insert the name of iso distro " DISTRO_ISO
-  qemu-system-x86_64 -m $RAM -smp 1 -enable-kvm -nic user,model=virtio-net-pci -boot menu=on,order=d -drive file=$DISK_NAME   -drive media=cdrom,file=$DISTRO_ISO
+  read -p "[] installing distro"
+  qemu-system-x86_64 -m $RAM_SPACE -smp 1 -enable-kvm -nic user,model=virtio-net-pci -boot menu=on,order=d -drive file=$DISK_NAME   -drive media=cdrom,file=$iso -display gtk
+
+  VM_DIR="$HOME/VMs/$upper"
+
+  cat <<'EOF' > "$VM_DIR/run.sh"
+#!/usr/bin/env bash
+
+qemu-system-x86_64 \
+-enable-kvm \
+-cpu host \
+-smp 2 \
+-m $RAM_SPACE \
+-drive file=$DISK_NAME ,format=raw,if=virtio \
+-nic user,model=virtio-net-pci \
+-display gtk
+EOF
+
+  chmod +x "$VM_DIR/run.sh"
 
 }
 
 
 function setup_vm(){
   init
-  check_config_file
+  setup $1
   create_disk
   install_distro
 
@@ -91,6 +113,4 @@ function start_distro(){
 
 
 
-
-
-setup
+setup_vm $1
