@@ -85,7 +85,7 @@ qemu-system-x86_64 \
 -cpu host \
 -smp 2 \
 -m $RAM_SPACE \
--drive file=$DISK_NAME ,format=raw,if=virtio \
+-drive file=$DISK_NAME ,format=qcow2,if=virtio \
 -nic user,model=virtio-net-pci \
 -display gtk
 EOF
