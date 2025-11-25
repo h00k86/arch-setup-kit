@@ -77,7 +77,7 @@ function install_distro(){
 
   VM_DIR="$HOME/VMs/$upper"
 
-  cat <<'EOF' > "$VM_DIR/run.sh"
+  cat <<EOF > "$VM_DIR/run.sh"
 #!/usr/bin/env bash
 
 qemu-system-x86_64 \
