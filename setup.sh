@@ -20,13 +20,16 @@ show_menu() {
     echo ""
     echo ""
     echo "  ======================================="
+    echo "  ======================================="
     echo "          ARCH SETUP KIT - MENU          "
     echo "  ======================================="
-    echo "  1) Base package"
+    echo "  ======================================="
+    echo "  1) Base Packages"
     echo "  2) Neovim"
-    echo "  3) i3 Window Manager"
-    echo "  4) QEMU / KVM"
-    echo "  5) Install all"
+    echo "  3) Debug"
+    echo "  4) QEMU/KVM"
+    echo "  5) Kernel dev"
+    echo "  6) Install all"
     echo "  0) Exit"
     echo
     read -p "Choice: " choice
@@ -50,12 +53,13 @@ while true; do
     case "$choice" in
         1) run_module base_package ;;
         2) run_module nvim ;;
-        3) run_module i3 ;;
+        3) run_module debug ;;
         4) run_module qemu ;;
-        5) 
+        5) run_module kernel ;;
+        6) 
             run_module base_package
             run_module nvim
-            run_module i3
+            run_module debug
             run_module qemu
             ;;
         0) 

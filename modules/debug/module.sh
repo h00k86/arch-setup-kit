@@ -25,11 +25,11 @@ fi
 source "$CONFIG_FILE"
 
 # Lista pacchetti da installare
-PACKAGES="$BASE_PACKAGES $BROWSER_MAIN $IMAGE_VIEWER_MAIN $DOCUMENT_VIEWER_MAIN "
+PACKAGES="$DEBUG_MAIN"
 
 
 
-echo "=== Installazione base package               ==="
+echo "=== Installazione Debug package               ==="
 echo "=== Verranno installati i seguenti pacchetti ==="
 echo $PACKAGES 
 
@@ -37,11 +37,20 @@ sleep 1
 
 # Aggiorno il sistema
 #echo "UPdateding the system, add root password"
-su -c "pacman -Syu;"
+sudo pacman -Syu
 
 # Installo i pacchetti
-su -c "pacman -S $PACKAGES"
+sudo pacman -S $PACKAGES
 
-echo "[+] Base packages installed."
+
+
+#installing pwndbg
+curl -qsL 'https://install.pwndbg.re' | sh -s -- -t pwndbg-gdb
+
+
+#installing pwntool
+
+
+echo "[+] Debug packages installed."
 
 
