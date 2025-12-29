@@ -33,7 +33,7 @@ echo $PACKAGES
 
 sleep 1
 
-su -c "pacman -S $PACKAGES "
+sudo pacman -S $PACKAGES
 
 echo "[+] QEMU Packages installed"
 

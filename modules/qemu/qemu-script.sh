@@ -106,11 +106,5 @@ function setup_vm(){
 
 
 
-function start_distro(){
-  echo "do nothing for now"
-}
-
-
-
 
 setup_vm $1

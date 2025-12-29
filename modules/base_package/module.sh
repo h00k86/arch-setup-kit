@@ -37,10 +37,10 @@ sleep 1
 
 # Aggiorno il sistema
 #echo "UPdateding the system, add root password"
-su -c "pacman -Syu;"
+sudo pacman -Syu
 
 # Installo i pacchetti
-su -c "pacman -S $PACKAGES"
+sudo pacman -S $PACKAGES
 
 echo "[+] Base packages installed."
 

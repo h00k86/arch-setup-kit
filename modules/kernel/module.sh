@@ -5,7 +5,7 @@
 #!/usr/bin/env bash
 
 # =====================================================
-# Modulo CODING - Arch Setup Kit
+# Modulo Kernel - Arch Setup Kit
 # Installazione strumenti di sviluppo base
 # =====================================================
 
@@ -25,12 +25,12 @@ fi
 source "$CONFIG_FILE"
 
 # Lista pacchetti da installare
-PACKAGES="$DEBUG_MAIN $EDITOR_MAIN"
+PACKAGES="$BASE_PACKAGES $BROWSER_MAIN $IMAGE_VIEWER_MAIN $DOCUMENT_VIEWER_MAIN "
 
 
 
-echo "=== Installazione Debug package               ==="
-echo "=== Verranno installati i seguenti pacchetti ==="
+echo "=== Installazione Kernel package              ==="
+echo "=== Verranno installati i seguenti pacchetti  ==="
 echo $PACKAGES 
 
 sleep 1
@@ -42,16 +42,6 @@ sudo pacman -Syu
 # Installo i pacchetti
 sudo pacman -S $PACKAGES
 
+echo "[+] Kernel packages installed."
 
-
-#installing pwndbg
-curl -qsL 'https://install.pwndbg.re' | sh -s -- -t pwndbg-gdb
-
-
-#installing pwntool
-
-
-echo "[+] Debug packages installed."
-
-cp ./init.lua ~/.config/nvim/
 
