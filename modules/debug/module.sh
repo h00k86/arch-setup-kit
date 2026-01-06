@@ -25,7 +25,7 @@ fi
 source "$CONFIG_FILE"
 
 # Lista pacchetti da installare
-PACKAGES="$DEBUG_MAIN $EDITOR_MAIN"
+PACKAGES="$CODING $DEBUG_MAIN $EDITOR_MAIN"
 
 
 
@@ -53,5 +53,23 @@ curl -qsL 'https://install.pwndbg.re' | sh -s -- -t pwndbg-gdb
 
 echo "[+] Debug packages installed."
 
+
+
 cp ./init.lua ~/.config/nvim/
+
+#Set elixir-ls
+git clone https://github.com/elixir-lsp/elixir-ls.git ~/elixir-ls
+cd ~/elixir-ls
+mix deps.get
+mix compile
+mix elixir_ls.release
+
+#install font for nvim
+mkdir -p ~/.local/share/fonts
+cd ~/.local/share/fonts
+wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip
+unzip FiraCode.zip
+fc-cache -fv
+
+
 

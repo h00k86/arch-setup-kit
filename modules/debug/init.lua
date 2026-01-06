@@ -36,46 +36,61 @@ vim.opt.rtp:prepend(lazypath)
 -------------------------------------------------
 require("lazy").setup({
 
-  -------------------------------------------------
   -- FILE EXPLORER
-  -------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = true,
   },
 
-  -------------------------------------------------
   -- FUZZY FINDER
-  -------------------------------------------------
   {
     "nvim-telescope/telescope.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
   },
 
-  -------------------------------------------------
   -- STATUS LINE
-  -------------------------------------------------
   {
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = true,
   },
-
-
-  -------------------------------------------------
-  -- LSP (API NUOVA NVIM 0.11)
-  -------------------------------------------------
+  -- COLORSCHEME 
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    config = function()
+        require("catppuccin").setup({
+            flavour = "mocha",
+            transparent_background = false,
+        })
+        vim.cmd("colorscheme catppuccin")
+    end,
+},
+  -- LSP
   {
     "neovim/nvim-lspconfig",
     config = function()
-      vim.lsp.config("clangd", {
-        capabilities = require("cmp_nvim_lsp").default_capabilities(),
-      })
+      local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
+      -- C LSP
+      vim.lsp.config("clangd", { capabilities = capabilities })
       vim.lsp.enable("clangd")
 
-      -- Keymap LSP
+      -- Elixir LSP
+      vim.lsp.config("elixirls", {
+        cmd = { "/home/h00k/elixir-ls/language_server.sh" },
+        settings = {
+          elixirLS = {
+            dialyzerEnabled = false,
+            fetchDeps = false,
+          }
+        },
+        capabilities = capabilities,
+      })
+      vim.lsp.enable("elixirls")
+
+      -- Keymaps LSP
       vim.keymap.set("n", "gd", vim.lsp.buf.definition)
       vim.keymap.set("n", "gD", vim.lsp.buf.declaration)
       vim.keymap.set("n", "gr", vim.lsp.buf.references)
@@ -85,9 +100,7 @@ require("lazy").setup({
     end,
   },
 
-  -------------------------------------------------
   -- AUTOCOMPLETAMENTO
-  -------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
@@ -118,20 +131,23 @@ require("lazy").setup({
     end,
   },
 
-  -------------------------------------------------
   -- FORMATTER
-  -------------------------------------------------
   {
     "stevearc/conform.nvim",
     config = function()
       require("conform").setup({
         formatters_by_ft = {
           c = { "clang_format" },
+          elixir = { "mix_format" },
         },
         format_on_save = true,
       })
     end,
   },
+
+  -- SYNTAX HIGHLIGHTING PER ELIXIR
+  { "elixir-editors/vim-elixir" },
+
 })
 
 -------------------------------------------------
