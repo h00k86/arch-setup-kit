@@ -25,11 +25,11 @@ fi
 source "$CONFIG_FILE"
 
 # Lista pacchetti da installare
-PACKAGES="$BASE_PACKAGES $BROWSER_MAIN $IMAGE_VIEWER_MAIN $DOCUMENT_VIEWER_MAIN "
+PACKAGES="$EDITOR_MAIN"
 
 
 
-echo "=== Installazione base package               ==="
+echo "=== Installazione NeoVim package             ==="
 echo "=== Verranno installati i seguenti pacchetti ==="
 echo $PACKAGES 
 
@@ -42,9 +42,28 @@ sudo pacman -Syu
 # Installo i pacchetti
 sudo pacman -S $PACKAGES
 
-echo "[+] Base packages installed."
 
 
-# i3 config file
-cp -i .config .config/i3/
+
+echo "[+] Debug packages installed."
+
+
+
+cp ./init.lua ~/.config/nvim/
+
+#Set elixir-ls
+git clone https://github.com/elixir-lsp/elixir-ls.git ~/elixir-ls
+cd ~/elixir-ls
+mix deps.get
+mix compile
+mix elixir_ls.release
+
+#install font for nvim
+mkdir -p ~/.local/share/fonts
+cd ~/.local/share/fonts
+wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/FiraCode.zip
+unzip FiraCode.zip
+fc-cache -fv
+
+
 
